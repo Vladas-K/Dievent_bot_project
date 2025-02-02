@@ -1,13 +1,18 @@
+import os
 import requests
 import logging
+from dotenv import load_dotenv
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, CallbackContext
 
-# Конфигурация
-API_URL = "http://127.0.0.1:8000/api/events/"  # URL API
-BOT_TOKEN = ""  # Вставьте ваш токен
 
-# Логирование
+load_dotenv()
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+BOT_TOKEN = os.getenv('TOKEN')
+API_URL = os.getenv('API_URL')
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
