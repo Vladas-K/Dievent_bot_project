@@ -9,6 +9,7 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler, Call
 load_dotenv()
 BOT_TOKEN = os.getenv('TOKEN')
 API_URL = os.getenv('API_URL')
+USER_API_URL = os.getenv('USER_API_URL')
 
 # Проверка наличия необходимых переменных окружения
 if not BOT_TOKEN or not API_URL:
@@ -34,7 +35,7 @@ async def start(update: Update, context: CallbackContext) -> None:
     
     async with aiohttp.ClientSession() as session:
         try:
-            async with session.post("http://127.0.0.1:8000/api/users/", json=user_data) as response:
+            async with session.post(USER_API_URL, json=user_data) as response:
                 response.raise_for_status()
         except Exception as e:
             logger.error(f"Ошибка регистрации пользователя: {e}")
