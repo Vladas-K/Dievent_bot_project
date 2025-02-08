@@ -4,6 +4,7 @@ import logging
 from dotenv import load_dotenv
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, CallbackContext
+from datetime import datetime
 
 # Загрузка переменных окружения
 load_dotenv()
@@ -90,9 +91,14 @@ async def button_handler(update: Update, context: CallbackContext) -> None:
             await query.message.reply_text("Ошибка получения данных!")
             return
     
+    # Парсинг и форматирование даты и времени
+    date_time_str = event['date_time']
+    date_time_obj = datetime.fromisoformat(date_time_str)
+    formatted_date_time = date_time_obj.strftime('%d.%m.%Y в %H:%M')
+    
     fields_map = {
         "desc": f"📖 Описание:\n{event['description']}",
-        "date": f"🗓 Дата и время:\n{event['date_time']}",
+        "date": f"🗓 Дата и время:\n{formatted_date_time}",
         "loc": f"📍 Локация:\n{event['location']}",
         "comp": f"🏢 Компания:\n{event['company_info']}",
         "dress": f"👗 Дресс-код:\n{event['dress_code']}",
