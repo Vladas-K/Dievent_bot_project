@@ -42,7 +42,7 @@ async def start(update: Update, context: CallbackContext) -> None:
             logger.error(f"Ошибка регистрации пользователя: {e}")
     
     await update.message.reply_text(
-        "Привет! Я бот мероприятий. Используй /events, чтобы узнать ближайшие события!",
+        f"Спасибо, что вы включили меня, {user_data['first_name']}! Я бот мероприятий. Используй /events, чтобы узнать ближайшие события!",
         reply_markup=main_keyboard()
     )
 
