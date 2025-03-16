@@ -36,10 +36,12 @@ async def start(update: Update, context: CallbackContext) -> None:
     
     async with aiohttp.ClientSession() as session:
         try:
-            async with session.post(USER_API_URL, json=user_data) as response:
+            async with session.post(USER_API_URL, json=user_data, headers={"Bot-Token": BOT_TOKEN}) as response:
                 response.raise_for_status()
-        except Exception as e:
-            logger.error(f"Ошибка регистрации пользователя: {e}")
+        except aiohttp.ClientResponseError as e:  # Специфичная обработка HTTP ошибок
+            logger.error(f"Ошибка регистрации пользователя: {e.status}, пользователь с user_id {user_data['user_id']} уже существует.")
+        except Exception as e:  # Общая обработка других ошибок
+            logger.error(f"Сетевая ошибка: {e}")
     
     await update.message.reply_text(
         f"Спасибо, что вы включили меня, {user_data['first_name']}! Я бот мероприятий. Используй /events, чтобы узнать ближайшие события!",
