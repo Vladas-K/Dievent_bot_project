@@ -43,3 +43,9 @@ services:
       - static:/staticfiles/
     ports:
       - 8000:80
+
+  eventbot:
+    build: ./eventbot/
+    env_file: .env  # Используем тот же .env файл, если там есть нужные переменные
+    depends_on:
+      - eventplanner
