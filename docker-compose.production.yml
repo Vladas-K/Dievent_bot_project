@@ -43,6 +43,8 @@ services:
       - static_volume:/staticfiles/
     ports:
       - 8000:80
+    depends_on:
+      - eventplanner
 
   eventbot:
     image: vlad2505/eventbot
