@@ -30,7 +30,8 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     "eventplanner",
-    "gateway"
+    "gateway",
+    '31.128.46.243'
 ]
 
 
