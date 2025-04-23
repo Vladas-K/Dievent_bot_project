@@ -2,15 +2,25 @@ import os
 import aiohttp
 import logging
 from dotenv import load_dotenv
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler, CallbackContext
+from telegram import (
+    Update,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    ReplyKeyboardMarkup,
+)
+from telegram.ext import (
+    Application,
+    CommandHandler,
+    CallbackQueryHandler,
+    CallbackContext,
+)
 from datetime import datetime
 
 # Загрузка переменных окружения
 load_dotenv()
-BOT_TOKEN = os.getenv('TOKEN')
-API_URL = os.getenv('API_URL')
-USER_API_URL = os.getenv('USER_API_URL')
+BOT_TOKEN = os.getenv("TOKEN")
+API_URL = os.getenv("API_URL")
+USER_API_URL = os.getenv("USER_API_URL")
 
 # Проверка наличия необходимых переменных окружения
 if not BOT_TOKEN or not API_URL:
@@ -22,7 +32,7 @@ logger = logging.getLogger(__name__)
 
 
 def main_keyboard():
-    return ReplyKeyboardMarkup([['/events']], resize_keyboard=True)
+    return ReplyKeyboardMarkup([["/events"]], resize_keyboard=True)
 
 
 async def start(update: Update, context: CallbackContext) -> None:
@@ -33,22 +43,27 @@ async def start(update: Update, context: CallbackContext) -> None:
         "username": user.username,
         "first_name": user.first_name,
         "last_name": user.last_name,
-        "subscribed": True
+        "subscribed": True,
     }
 
     async with aiohttp.ClientSession() as session:
         try:
-            async with session.post(USER_API_URL, json=user_data, headers={"Bot-Token": BOT_TOKEN}) as response:
+            async with session.post(
+                USER_API_URL, json=user_data, headers={"Bot-Token": BOT_TOKEN}
+            ) as response:
                 response.raise_for_status()
         except aiohttp.ClientResponseError as e:  # Специфичная обработка HTTP ошибок
             logger.error(
-                f"Ошибка регистрации пользователя: {e.status}, пользователь с user_id {user_data['user_id']} уже существует.")
+                f"Ошибка регистрации пользователя: {e.status}, "
+                f"пользователь с user_id {user_data['user_id']} уже существует."
+            )
         except Exception as e:  # Общая обработка других ошибок
             logger.error(f"Сетевая ошибка: {e}")
 
     await update.message.reply_text(
-        f"Спасибо, что вы включили меня, {user_data['first_name']}! Я бот мероприятий. Используй /events, чтобы узнать ближайшие события!",
-        reply_markup=main_keyboard()
+        f"Спасибо, что вы включили меня, {user_data['first_name']}! "
+        f"Я бот мероприятий. Используй /events, чтобы узнать ближайшие события!",
+        reply_markup=main_keyboard(),
     )
 
 
@@ -61,21 +76,32 @@ async def get_events(update: Update, context: CallbackContext) -> None:
                 events = await response.json()
         except Exception as e:
             logger.error(f"Ошибка получения событий: {e}")
-            await update.message.reply_text("Ошибка получения данных, попробуйте позже.")
+            await update.message.reply_text(
+                "Ошибка получения данных, попробуйте позже."
+            )
             return
 
     if not events:
-        await update.message.reply_text("Скоро будут новые мероприятия, следите за обновлениями!")
+        await update.message.reply_text(
+            "Скоро будут новые мероприятия, следите за обновлениями!"
+        )
         return
 
     for event in events[:5]:  # Ограничим 5 событиями
         keyboard = [
             [InlineKeyboardButton("📖 Описание", callback_data=f"desc_{event['id']}")],
-            [InlineKeyboardButton(
-                "🗓 Дата и время", callback_data=f"date_{event['id']}")],
+            [
+                InlineKeyboardButton(
+                    "🗓 Дата и время", callback_data=f"date_{event['id']}"
+                )
+            ],
             [InlineKeyboardButton("📍 Локация", callback_data=f"loc_{event['id']}")],
             [InlineKeyboardButton("🏢 Компания", callback_data=f"comp_{event['id']}")],
-            [InlineKeyboardButton("👗 Дресс-код", callback_data=f"dress_{event['id']}")],
+            [
+                InlineKeyboardButton(
+                    "👗 Дресс-код", callback_data=f"dress_{event['id']}"
+                )
+            ],
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         await update.message.reply_text(
@@ -100,9 +126,9 @@ async def button_handler(update: Update, context: CallbackContext) -> None:
             return
 
     # Парсинг и форматирование даты и времени
-    date_time_str = event['date_time']
+    date_time_str = event["date_time"]
     date_time_obj = datetime.fromisoformat(date_time_str)
-    formatted_date_time = date_time_obj.strftime('%d.%m.%Y в %H:%M')
+    formatted_date_time = date_time_obj.strftime("%d.%m.%Y в %H:%M")
 
     fields_map = {
         "desc": f"📖 Описание:\n{event['description']}",
