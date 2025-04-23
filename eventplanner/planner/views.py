@@ -1,8 +1,10 @@
 import logging
+
 from rest_framework import viewsets
+
 from .models import Event, TelegramUser
-from .serializers import EventSerializer, TelegramUserSerializer
 from .permissions import AllowTelegramOrAuthenticated
+from .serializers import EventSerializer, TelegramUserSerializer
 
 
 class EventViewSet(viewsets.ReadOnlyModelViewSet):

@@ -1,7 +1,7 @@
 import os
+
 from dotenv import load_dotenv
 from rest_framework.permissions import BasePermission
-
 
 load_dotenv()
 

@@ -1,20 +1,21 @@
-import os
-import aiohttp
 import logging
+import os
+from datetime import datetime
+
+import aiohttp
 from dotenv import load_dotenv
 from telegram import (
-    Update,
     InlineKeyboardButton,
     InlineKeyboardMarkup,
     ReplyKeyboardMarkup,
+    Update,
 )
 from telegram.ext import (
     Application,
-    CommandHandler,
-    CallbackQueryHandler,
     CallbackContext,
+    CallbackQueryHandler,
+    CommandHandler,
 )
-from datetime import datetime
 
 # Загрузка переменных окружения
 load_dotenv()
