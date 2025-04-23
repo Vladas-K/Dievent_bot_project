@@ -20,8 +20,10 @@ if not BOT_TOKEN or not API_URL:
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 def main_keyboard():
     return ReplyKeyboardMarkup([['/events']], resize_keyboard=True)
+
 
 async def start(update: Update, context: CallbackContext) -> None:
     """Приветственное сообщение и регистрация пользователя."""
@@ -33,20 +35,22 @@ async def start(update: Update, context: CallbackContext) -> None:
         "last_name": user.last_name,
         "subscribed": True
     }
-    
+
     async with aiohttp.ClientSession() as session:
         try:
             async with session.post(USER_API_URL, json=user_data, headers={"Bot-Token": BOT_TOKEN}) as response:
                 response.raise_for_status()
         except aiohttp.ClientResponseError as e:  # Специфичная обработка HTTP ошибок
-            logger.error(f"Ошибка регистрации пользователя: {e.status}, пользователь с user_id {user_data['user_id']} уже существует.")
+            logger.error(
+                f"Ошибка регистрации пользователя: {e.status}, пользователь с user_id {user_data['user_id']} уже существует.")
         except Exception as e:  # Общая обработка других ошибок
             logger.error(f"Сетевая ошибка: {e}")
-    
+
     await update.message.reply_text(
         f"Спасибо, что вы включили меня, {user_data['first_name']}! Я бот мероприятий. Используй /events, чтобы узнать ближайшие события!",
         reply_markup=main_keyboard()
     )
+
 
 async def get_events(update: Update, context: CallbackContext) -> None:
     """Получает и отправляет список событий с кнопками."""
@@ -67,7 +71,8 @@ async def get_events(update: Update, context: CallbackContext) -> None:
     for event in events[:5]:  # Ограничим 5 событиями
         keyboard = [
             [InlineKeyboardButton("📖 Описание", callback_data=f"desc_{event['id']}")],
-            [InlineKeyboardButton("🗓 Дата и время", callback_data=f"date_{event['id']}")],
+            [InlineKeyboardButton(
+                "🗓 Дата и время", callback_data=f"date_{event['id']}")],
             [InlineKeyboardButton("📍 Локация", callback_data=f"loc_{event['id']}")],
             [InlineKeyboardButton("🏢 Компания", callback_data=f"comp_{event['id']}")],
             [InlineKeyboardButton("👗 Дресс-код", callback_data=f"dress_{event['id']}")],
@@ -77,11 +82,12 @@ async def get_events(update: Update, context: CallbackContext) -> None:
             f"📌 *{event['title']}*", parse_mode="Markdown", reply_markup=reply_markup
         )
 
+
 async def button_handler(update: Update, context: CallbackContext) -> None:
     """Обработчик кнопок."""
     query = update.callback_query
     await query.answer()
-    
+
     field, event_id = query.data.split("_", 1)
     async with aiohttp.ClientSession() as session:
         try:
@@ -92,12 +98,12 @@ async def button_handler(update: Update, context: CallbackContext) -> None:
             logger.error(f"Ошибка получения информации о событии: {e}")
             await query.message.reply_text("Ошибка получения данных!")
             return
-    
+
     # Парсинг и форматирование даты и времени
     date_time_str = event['date_time']
     date_time_obj = datetime.fromisoformat(date_time_str)
     formatted_date_time = date_time_obj.strftime('%d.%m.%Y в %H:%M')
-    
+
     fields_map = {
         "desc": f"📖 Описание:\n{event['description']}",
         "date": f"🗓 Дата и время:\n{formatted_date_time}",
@@ -105,20 +111,22 @@ async def button_handler(update: Update, context: CallbackContext) -> None:
         "comp": f"🏢 Компания:\n{event['company_info']}",
         "dress": f"👗 Дресс-код:\n{event['dress_code']}",
     }
-    
+
     if field in fields_map:
         await query.message.reply_text(fields_map[field])
+
 
 def main():
     """Запуск бота."""
     app = Application.builder().token(BOT_TOKEN).build()
-    
+
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("events", get_events))
     app.add_handler(CallbackQueryHandler(button_handler))
-    
+
     logger.info("Бот запущен...")
     app.run_polling()
+
 
 if __name__ == "__main__":
     main()
