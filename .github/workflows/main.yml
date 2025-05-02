@@ -87,7 +87,7 @@ jobs:
         with:
           # Параметр context: ./ eventplanner/ указывает, что нужный Dockerfile 
           # находится в ./ eventplanner/
-          context: ./ eventplanner/
+          context: ./eventplanner/
           # Параметр push: true указывает, что образ нужно не только собрать,
           # но и отправить на Docker Hub
           push: true
