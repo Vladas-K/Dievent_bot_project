@@ -1,4 +1,3 @@
-# .github/workflows/main.yml
 name: Main Eventplanner workflow
 
 on:
@@ -8,7 +7,6 @@ on:
 
 jobs:
   tests:
-    # Разворачиваем окружение:
     runs-on: ubuntu-latest
 
     services:
@@ -56,8 +54,8 @@ jobs:
         cd eventplanner
         pytest
 
-  build_and_push_to_docker_hub:
-    name: Push Docker image to DockerHub
+  build_eventplanner_and_push_to_docker_hub:
+    name: Push eventplanner Docker image to DockerHub
     runs-on: ubuntu-latest
     needs: tests
     steps:
@@ -111,7 +109,7 @@ jobs:
           tags: vlad2505/gateway:latest
 
   build_eventbot_and_push_to_docker_hub:
-    name: Push gateway Docker image to DockerHub
+    name: Push eventbot Docker image to DockerHub
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
