@@ -32,5 +32,6 @@ jobs:
     - name: Test with flake8 and django tests
       # Вызываем flake8 и указываем ему,
       # что нужно проверить файлы только в папках eventbot/ eventplanner/ gateway/
-      run: python -m flake8 eventbot/ eventplanner/
-      run: pytest
+      run: |
+        python -m flake8 eventbot/ eventplanner/
+        pytest
