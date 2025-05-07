@@ -11,11 +11,6 @@ class EventViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
 
-# class TelegramUserViewSet(viewsets.ModelViewSet):
-#     queryset = TelegramUser.objects.all()
-#     serializer_class = TelegramUserSerializer
-#     permission_classes = [AllowTelegramOrAuthenticated]
-
 
 logger = logging.getLogger(__name__)
 
