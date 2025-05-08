@@ -17,17 +17,14 @@ from telegram.ext import (
     CommandHandler,
 )
 
-# Загрузка переменных окружения
 load_dotenv()
 BOT_TOKEN = os.getenv("TOKEN")
 API_URL = os.getenv("API_URL")
 USER_API_URL = os.getenv("USER_API_URL")
 
-# Проверка наличия необходимых переменных окружения
 if not BOT_TOKEN or not API_URL:
     raise ValueError("Отсутствует TOKEN или API_URL в .env файле")
 
-# Настройка логирования
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -53,12 +50,12 @@ async def start(update: Update, context: CallbackContext) -> None:
                 USER_API_URL, json=user_data, headers={"Bot-Token": BOT_TOKEN}
             ) as response:
                 response.raise_for_status()
-        except aiohttp.ClientResponseError as e:  # Специфичная обработка HTTP ошибок
+        except aiohttp.ClientResponseError as e:
             logger.error(
                 f"Ошибка регистрации пользователя: {e.status}, "
                 f"пользователь с user_id {user_data['user_id']} уже существует."
             )
-        except Exception as e:  # Общая обработка других ошибок
+        except Exception as e:
             logger.error(f"Сетевая ошибка: {e}")
 
     await update.message.reply_text(
@@ -88,7 +85,7 @@ async def get_events(update: Update, context: CallbackContext) -> None:
         )
         return
 
-    for event in events[:5]:  # Ограничим 5 событиями
+    for event in events[:5]:
         keyboard = [
             [InlineKeyboardButton("📖 Описание", callback_data=f"desc_{event['id']}")],
             [
