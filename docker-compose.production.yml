@@ -11,6 +11,7 @@ services:
     env_file: .env
     volumes:
       - pg_data_production:/var/lib/postgresql/data
+    restart: unless-stopped
 
   eventplanner:
     image: vlad2505/eventplanner 
@@ -19,6 +20,7 @@ services:
       - db
     volumes:
       - static_volume:/eventplanner_static
+    restart: unless-stopped
 
   gateway:
     image: vlad2505/gateway
@@ -28,9 +30,11 @@ services:
       - 8000:80
     depends_on:
       - eventplanner
+    restart: unless-stopped
 
   eventbot:
     image: vlad2505/eventbot
     env_file: .env 
     depends_on:
       - eventplanner
+    restart: unless-stopped
