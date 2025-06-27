@@ -5,7 +5,7 @@ class Event(models.Model):
     title = models.CharField(max_length=100, verbose_name="Название")
     description = models.TextField(verbose_name="Описание мероприятия")
     date_time = models.DateTimeField(verbose_name="Дата проведения")
-    location = models.TextField(max_length=200, verbose_name="Место проведения")
+    location = models.TextField(verbose_name="Место проведения")
     company_info = models.TextField(verbose_name="Информация о компании организаторе")
     dress_code = models.CharField(
         max_length=200, verbose_name="Дресс-код"
