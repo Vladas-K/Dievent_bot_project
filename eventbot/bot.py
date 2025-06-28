@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 
 def main_keyboard():
-    return ReplyKeyboardMarkup([["/Подробности"]], resize_keyboard=True)
+    return ReplyKeyboardMarkup([["/events"]], resize_keyboard=True)
 
 
 async def start(update: Update, context: CallbackContext) -> None:
@@ -93,16 +93,8 @@ async def get_events(update: Update, context: CallbackContext) -> None:
                     "🗓 Дата и время", callback_data=f"date_{event['id']}"
                 )
             ],
-            [
-                InlineKeyboardButton(
-                    "📍 Место проведения", callback_data=f"loc_{event['id']}"
-                )
-            ],
-            [
-                InlineKeyboardButton(
-                    "🏢 Компания организатор", callback_data=f"comp_{event['id']}"
-                )
-            ],
+            [InlineKeyboardButton("📍 Место проведения", callback_data=f"loc_{event['id']}")],
+            [InlineKeyboardButton("🏢 Компания организатор", callback_data=f"comp_{event['id']}")],
             [
                 InlineKeyboardButton(
                     "👗 Дресс-код", callback_data=f"dress_{event['id']}"
@@ -153,7 +145,7 @@ def main():
     app = Application.builder().token(BOT_TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("Подробности", get_events))
+    app.add_handler(CommandHandler("events", get_events))
     app.add_handler(CallbackQueryHandler(button_handler))
 
     logger.info("Бот запущен...")
