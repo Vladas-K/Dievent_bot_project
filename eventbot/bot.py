@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 
 def main_keyboard():
-    return ReplyKeyboardMarkup([["/events"]], resize_keyboard=True)
+    return ReplyKeyboardMarkup([["/Подробности"]], resize_keyboard=True)
 
 
 async def start(update: Update, context: CallbackContext) -> None:
