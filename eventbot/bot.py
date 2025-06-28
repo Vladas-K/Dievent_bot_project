@@ -93,8 +93,8 @@ async def get_events(update: Update, context: CallbackContext) -> None:
                     "🗓 Дата и время", callback_data=f"date_{event['id']}"
                 )
             ],
-            [InlineKeyboardButton("📍 Локация", callback_data=f"loc_{event['id']}")],
-            [InlineKeyboardButton("🏢 Компания", callback_data=f"comp_{event['id']}")],
+            [InlineKeyboardButton("📍 Место проведения", callback_data=f"loc_{event['id']}")],
+            [InlineKeyboardButton("🏢 Компания организатор", callback_data=f"comp_{event['id']}")],
             [
                 InlineKeyboardButton(
                     "👗 Дресс-код", callback_data=f"dress_{event['id']}"
