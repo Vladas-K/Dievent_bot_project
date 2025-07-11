@@ -15,6 +15,8 @@ from telegram.ext import (
     CallbackContext,
     CallbackQueryHandler,
     CommandHandler,
+    MessageHandler,
+    filters,
 )
 
 load_dotenv()
@@ -30,7 +32,7 @@ logger = logging.getLogger(__name__)
 
 
 def main_keyboard():
-    return ReplyKeyboardMarkup([["/Подробности"]], resize_keyboard=True)
+    return ReplyKeyboardMarkup([["Подробности"]], resize_keyboard=True)
 
 
 async def start(update: Update, context: CallbackContext) -> None:
@@ -153,7 +155,9 @@ def main():
     app = Application.builder().token(BOT_TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("Подробности", get_events))
+    app.add_handler(
+        MessageHandler(filters.TEXT & filters.Regex("^Подробности$"), get_events)
+    )
     app.add_handler(CallbackQueryHandler(button_handler))
 
     logger.info("Бот запущен...")
