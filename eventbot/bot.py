@@ -62,7 +62,7 @@ async def start(update: Update, context: CallbackContext) -> None:
 
     await update.message.reply_text(
         f"Спасибо, что вы включили меня, {user_data['first_name']}! "
-        f"Я бот мероприятий. Используй кнопку Подробности,"
+        f"Я бот мероприятий. Используй кнопку Подробности, "
         f"чтобы узнать ближайшие события!",
         reply_markup=main_keyboard(),
     )
