@@ -62,10 +62,13 @@ async def start(update: Update, context: CallbackContext) -> None:
 
     await update.message.reply_text(
         f"Спасибо, что вы включили меня, {user_data['first_name']}! "
-        f"Я бот мероприятий. Используй кнопку Подробности, "
+        f"Я бот мероприятий. " 
+        f"У меня вы можете узнать все о свадебном торжестве Карла и Олеси. "
+        f"Используй кнопку Подробности, "
         f"чтобы узнать детали ближайшего события!",
         reply_markup=main_keyboard(),
     )
+    
 
 
 async def get_events(update: Update, context: CallbackContext) -> None:
