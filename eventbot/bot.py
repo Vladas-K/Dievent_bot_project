@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 
 def main_keyboard():
-    return ReplyKeyboardMarkup([["/events"]], resize_keyboard=True)
+    return ReplyKeyboardMarkup([["/Подробности"]], resize_keyboard=True)
 
 
 async def start(update: Update, context: CallbackContext) -> None:
@@ -60,7 +60,7 @@ async def start(update: Update, context: CallbackContext) -> None:
 
     await update.message.reply_text(
         f"Спасибо, что вы включили меня, {user_data['first_name']}! "
-        f"Я бот мероприятий. Используй /events, чтобы узнать ближайшие события!",
+        f"Я бот мероприятий. Используй /Подробности, чтобы узнать ближайшие события!",
         reply_markup=main_keyboard(),
     )
 
@@ -153,7 +153,7 @@ def main():
     app = Application.builder().token(BOT_TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("events", get_events))
+    app.add_handler(CommandHandler("Подробности", get_events))
     app.add_handler(CallbackQueryHandler(button_handler))
 
     logger.info("Бот запущен...")
